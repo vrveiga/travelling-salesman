@@ -26,9 +26,7 @@ void forca_bruta(LISTA* lista, int dist[20][20], bool* usado, int n, int* ret) {
             lista_remover_fim(lista);
             usado[i] = false;
         }
-    }
-
-    
+    }    
 }
 
 int main() {
@@ -50,4 +48,6 @@ int main() {
     forca_bruta(lista, dist, usado, n, &resp);
 
     printf("O melhor caminho tem peso: %d\n", resp);
+
+    lista_apagar(&lista);
 }
