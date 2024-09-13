@@ -58,6 +58,15 @@ int lista_buscar(LISTA* lista, int indice) {
     return lista->dados[indice];
 }
 
+int lista_tamanho(LISTA* lista) {
+    if (lista == NULL) {
+        printf("ERRO: Lista não existe!!!\n");
+        return -1;
+    }
+
+    return lista->tam;
+}
+
 void lista_apagar(LISTA** lista) {
     if (*lista == NULL) {
         printf("ERRO: Lista não existe!!!\n");

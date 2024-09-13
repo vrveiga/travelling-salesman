@@ -9,6 +9,7 @@
     void lista_adicionar_fim(LISTA* lista, int x);
     void lista_remover_fim(LISTA* lista);
     int lista_buscar(LISTA* lista, int indice);
+    int lista_tamanho(LISTA* lista);
     void lista_apagar(LISTA** lista);
 
 #endif
