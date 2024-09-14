@@ -67,6 +67,15 @@ int lista_tamanho(LISTA* lista) {
     return lista->tam;
 }
 
+void lista_limpar(LISTA* lista) {
+    if (lista == NULL) {
+        printf("ERRO: Lista não existe!!!\n");
+        return;
+    }
+
+    lista->tam = 0;
+}
+
 void lista_apagar(LISTA** lista) {
     if (*lista == NULL) {
         printf("ERRO: Lista não existe!!!\n");

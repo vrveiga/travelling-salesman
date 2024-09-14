@@ -4,7 +4,7 @@
 
 #define INF 99999999
 
-void forca_bruta(LISTA* lista, int dist[20][20], bool* usado, int n, int* ret) {    
+void forca_bruta(LISTA* lista, LISTA* caminho, int dist[20][20], bool* usado, int n, int* ret) {    
     if (lista_tamanho(lista) == n-1) {
         int atual = dist[1][lista_buscar(lista, 0)];
         for (int i = 1; i < n-1; i++) {
@@ -16,13 +16,20 @@ void forca_bruta(LISTA* lista, int dist[20][20], bool* usado, int n, int* ret) {
 
         if (atual < *ret) {
             *ret = atual;
+            lista_limpar(caminho);
+            lista_adicionar_fim(caminho, 1);
+            for (int i = 0; i < n-1; i++) {
+                int at = lista_buscar(lista, i);
+                lista_adicionar_fim(caminho, at);
+            }
+            lista_adicionar_fim(caminho, 1);
         }
     } else {
         for (int i = 2; i <= n; i++) {
             if (usado[i]) continue;
             usado[i] = true;
             lista_adicionar_fim(lista, i);
-            forca_bruta(lista, dist, usado, n, ret);
+            forca_bruta(lista, caminho, dist, usado, n, ret);
             lista_remover_fim(lista);
             usado[i] = false;
         }
@@ -43,11 +50,18 @@ int main() {
     }
 
     LISTA* lista = lista_criar();
+    LISTA* caminho = lista_criar();
     int resp = INF;
 
-    forca_bruta(lista, dist, usado, n, &resp);
+    forca_bruta(lista, caminho, dist, usado, n, &resp);
 
-    printf("O melhor caminho tem peso: %d\n", resp);
+    printf("Cidade Origem: 1\n");
+    printf("Rota: 1");
+    for (int i = 1; i < n+1; i++) {
+        printf(" - %d", lista_buscar(caminho, i));
+    }
+    printf("\nMenor Distância: %d\n", resp);
 
     lista_apagar(&lista);
+    lista_apagar(&caminho);
 }
