@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <limits.h>
+#include <time.h>
 #include "lista.h"
-
-#define INF 99999999
 
 /**
  * Função para gerar todas as permutações de caminhos
@@ -51,7 +51,7 @@ void forca_bruta(LISTA* lista, LISTA* caminho, int dist[20][20], bool* usado, in
             lista_remover_fim(lista);
             usado[i] = false;
         }
-    }    
+    }
 }
 
 int main() {
@@ -74,12 +74,17 @@ int main() {
     // Criação das Estruturas de Dados
     LISTA* lista = lista_criar();
     LISTA* caminho = lista_criar();
+    int resp = INT_MAX;
 
-    // Variável para guardar a menor distância
-    int resp = INF;
+    clock_t start, end;
 
-    // Chamada da função para calcular a melhor rota e menor distância
+    start = clock();
     forca_bruta(lista, caminho, dist, usado, n, &resp);
+    end = clock();
+
+    double tempo = (double)(end - start) / CLOCKS_PER_SEC;
+
+    printf("Tempo de Execução: %lf segundos\n", tempo);
 
     // Printando a resposta
     printf("Cidade Origem: 1\n");
