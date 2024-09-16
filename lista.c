@@ -51,7 +51,7 @@ int lista_buscar(LISTA* lista, int indice) {
         return -1;
     }
 
-    if (indice >= lista->tam) {
+    if (indice < 0 || indice >= lista->tam) {
         printf("ERRO: Indice inválido!!!\n");
         exit(-1);
     }
