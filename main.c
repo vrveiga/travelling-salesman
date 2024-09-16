@@ -64,6 +64,11 @@ int main() {
 
     // Leitura dos dados
     scanf("%d", &n);
+    if (n <= 1) {
+        printf("ERRO: Número de cidades inválido!!!\n");
+        return 0;
+    }
+
     for (int i = 0; i < (n*(n-1))/2; i++) {
         int x, y, w;
         scanf("%d %d %d", &x, &y, &w);
