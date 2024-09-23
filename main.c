@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 #include <time.h>
 #include "lista.h"
 
@@ -8,26 +8,27 @@
 /**
  * Função para gerar todas as permutações de caminhos
  * 
- * @param lista -> Estrutura de dados que guarda a permutação atual
- * @param caminho -> Estrutura de dados que guarda a rota mais eficiente até o momento
- * @param dist -> Matriz que guarda as distâncias entre as cidades
- * @param usado -> Vetor que guarda o valor que verifica se uma cidade já está na permutação atual
+ * @param lista -> Lista de dados que guarda a permutação atual
+ * @param caminho -> Lista que guarda a rota mais eficiente até o momento
+ * @param dist -> Lista de Listas que guarda as distâncias entre as cidades
+ * @param usado -> Lista que guarda o valor que verifica se uma cidade já está na permutação atual
  * @param n -> Número de cidades
  * @param ret -> Distância mais eficiente a ser percorrida
  * 
  * @return -> void
  */
-void forca_bruta(LISTA* lista, LISTA* caminho, int dist[20][20], bool* usado, int n, int* ret, int ini) {  
+void forca_bruta(LISTA* lista, LISTA* caminho, LISTA* dist[20], LISTA* usado, int n, int* ret, int ini) {  
     // Verifica de a permutação atual possúi o tamanho necessário (n-1)  
     if (lista_tamanho(lista) == n-1) {
         // Soma na variável "atual" as distâncias da rota da permutação atual
-        int atual = dist[ini][lista_buscar(lista, 0)];
+        int atual = lista_buscar(dist[ini-1], lista_buscar(lista, 0)-1);
+
         for (int i = 1; i < n-1; i++) {
             int u = lista_buscar(lista, i-1);
             int v = lista_buscar(lista, i);
-            atual += dist[u][v];
+            atual += lista_buscar(dist[u-1], v-1);
         }
-        atual += dist[lista_buscar(lista, n-2)][ini];
+        atual += lista_buscar(dist[lista_buscar(lista, n-2)-1], ini-1);
 
         // Verifica se a soma ("atual") é menor que a menor distância até o momento
         if (atual < *ret) {
@@ -45,12 +46,12 @@ void forca_bruta(LISTA* lista, LISTA* caminho, int dist[20][20], bool* usado, in
         // Construção da perumutação. Loop passa pelas cidades 2 até n, colocando elas na
         // estrutura "lista" caso ela não esteja de forma recursiva
         for (int i = 1; i <= n; i++) {
-            if (i == ini || usado[i]) continue;
-            usado[i] = true;
+            if (i == ini || lista_buscar(usado, i-1)) continue;
+            lista_trocar(usado, i-1, 1);
             lista_adicionar_fim(lista, i);
             forca_bruta(lista, caminho, dist, usado, n, ret, ini);
             lista_remover_fim(lista);
-            usado[i] = false;
+            lista_trocar(usado, i-1, 0);
         }
     }
 }
@@ -59,38 +60,53 @@ int main() {
     // Número de cidades, caminhos e cidade inicial
     int n, m, ini;
     // Matriz das distâncias entre as cidades
-    int dist[20][20] = {};
-    // Vetor que guarda o valor que verifica se uma cidade já está na permutação atual
-    bool usado[20] = {};
+    LISTA* dist[20];
 
-    // Leitura dos dados
+    // Leitura dos dados e inicializar distâncias
     scanf("%d %d %d", &n, &ini, &m);
     if (n <= 1 || ini < 1 || ini > n) {
         printf("ERRO: Número de cidades inválido!!!\n");
         return 0;
     }
 
+    for (int i = 0; i < n; i++) {
+        dist[i] = lista_criar();
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            lista_adicionar_fim(dist[i], 0);
+        }
+    }
+
     for (int i = 0; i < m; i++) {
         int x, y, w;
         scanf("%d %d %d", &x, &y, &w);
-        dist[x][y] = w;
-        dist[y][x] = w;
+        x--;
+        y--;
+        lista_trocar(dist[x], y, w);
+        lista_trocar(dist[y], x, w);
     }
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
             if (i == j) continue;
-            if (dist[i][j] == 0) {
-                dist[i][j] = INF;
-                dist[j][i] = INF;
+            if (lista_buscar(dist[i], j) == 0) {
+                lista_trocar(dist[i], j, INF);
+                lista_trocar(dist[j], i, INF);
             }
         }
     }
 
     // Criação das Estruturas de Dados
     LISTA* lista = lista_criar();
+    LISTA* usado = lista_criar();
     LISTA* caminho = lista_criar();
     int resp = INF;
+
+    // Inicializa a lista usado
+    for (int i = 0; i < n; i++) {
+        lista_adicionar_fim(usado, 0);
+    }
 
     clock_t start, end;
 
@@ -110,6 +126,11 @@ int main() {
     }
     printf("\nMenor Distância: %d\n", resp);
 
+    // Apagando as estruturas
     lista_apagar(&lista);
     lista_apagar(&caminho);
+    lista_apagar(&usado);
+    for (int i = 0; i < n; i++) {
+        lista_apagar(&(dist[i]));
+    }
 }

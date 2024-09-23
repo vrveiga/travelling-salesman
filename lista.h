@@ -14,6 +14,8 @@
     void lista_remover_fim(LISTA* lista);
     // Retorna o elemento a partir de seu "indice" na lista
     int lista_buscar(LISTA* lista, int indice);
+    // Troca um dos elementos da lista por outro a partir do indice
+    void lista_trocar(LISTA* lista, int indice, int novo);
     // Retorna o tamanho da lista
     int lista_tamanho(LISTA* lista);
     //Limpa a lista de seus elementos

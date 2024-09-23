@@ -50,12 +50,25 @@ int lista_buscar(LISTA* lista, int indice) {
         printf("ERRO: Lista não existe!!!\n");
         return -1;
     }
-
     if (indice < 0 || indice >= lista->tam) {
         printf("ERRO: Indice inválido!!!\n");
         exit(-1);
     }
+
     return lista->dados[indice];
+}
+
+void lista_trocar(LISTA* lista, int indice, int novo) {
+    if (lista == NULL) {
+        printf("ERRO: Lista não existe!!!\n");
+        return;
+    }
+    if (indice < 0 || indice >= lista->tam) {
+        printf("ERRO: Indice inválido!!!\n");
+        return;
+    }
+
+    lista->dados[indice] = novo;
 }
 
 int lista_tamanho(LISTA* lista) {
