@@ -6,13 +6,28 @@
 // problema do caixeiro viajante em O(N^2*2^N) usando dp em bitmask
 
 int main() {
-    int n, resp = INF;
-    int dist[16][16] = {};
+    //Declarando variáveis
+    int n, ini, m, resp = INF;
+    int dist[16][16] = {}; 
     int dp[1<<15][16];
     int pai[1<<15][16];
 
-    scanf("%d", &n);
-    for (int i = 0; i < (n*(n-1))/2; i++) {
+    //Lendo o input
+    scanf("%d %d %d", &n, &ini, &m);
+    if (n <= 1 || ini < 1 || ini > n) {
+        printf("ERRO: Número de cidades inválido!!!\n");
+        return 0;
+    }
+
+    //Inicializando a matriz
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            dist[i][j] = 0;
+        }
+    }
+
+    //Lendo as distâncias entre as cidades
+    for (int i = 0; i < m; i++) {
         int x, y, w;
         scanf("%d %d %d", &x, &y, &w);
         x--, y--; // prefixar as cidades no 0 (1 -> 0, 2 ->1, ...)
@@ -20,9 +35,20 @@ int main() {
         dist[y][x] = w;
     }
 
+    //Lidando com as estradas que não existem
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i == j) continue;
+            if (dist[i][j] == 0) {
+                dist[i][j] = INF;
+                dist[j][i] = INF;
+            }
+        }
+    }
+    
     for (int mask = 0; mask < (1<<(n-1)); mask++) {
         for (int i = 0; i < n; i++) {
-            dp[mask][i] = INF; // inicia as distancias mínimas de 1 a n como INF
+            dp[mask][i] = INF; // inicia as distancias mínimas de 'ini' a n como INF
         }
     }
     
