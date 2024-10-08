@@ -87,24 +87,29 @@ int main() {
 
     printf("Tempo de Execução: %lf segundos\n", tempo);
 
-    int caminho[16];
+    LISTA* caminho = lista_criar();
     int cidade_atual = ultima_cidade;
     int id = 0;
+    int id_ini = -1;
 
     while (cidade_atual != 0) {
-        caminho[id++] = cidade_atual + 1;
+        lista_adicionar_fim(caminho, cidade_atual + 1);
+        if (cidade_atual+1 == ini) 
+            id_ini = id;
+        id++;
         int prox_cidade = lista_buscar(pai[mask], cidade_atual);
         mask ^= (1<<(cidade_atual-1));
         cidade_atual = prox_cidade;
     }
-    caminho[id++] = 1;
+    lista_adicionar_fim(caminho, 1);
 
-    printf("Cidade Origem: 1\n");
-    
-    printf("Rota: 1");
-    for (int i = 0; i <= id-1; i++) {
-        printf(" - %d", caminho[i]);
-    }
+    printf("Cidade Origem: %d\n", ini);    
+    printf("Rota: %d", ini);
+    for (int i = id_ini-1; i >= 0; i--) 
+        printf(" - %d", lista_buscar(caminho, i));
+
+    for (int i = id; i >= id_ini; i--)
+        printf(" - %d", lista_buscar(caminho, i));
 
     printf("\nMenor Distância: %d\n", resp);
 }
