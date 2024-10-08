@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "lista.h"
 #include <time.h>
 
 #define INF 99999999
@@ -8,21 +9,18 @@
 int main() {
     //Declarando variáveis
     int n, ini, m, resp = INF;
-    int dist[16][16] = {}; 
-    int dp[1<<15][16];
-    int pai[1<<15][16];
+    LISTA* dist[16];
+    LISTA* dp[1<<15];
+    LISTA* pai[1<<15];
 
     //Lendo o input
     scanf("%d %d %d", &n, &ini, &m);
-    if (n <= 1 || ini < 1 || ini > n) {
-        printf("ERRO: Número de cidades inválido!!!\n");
-        return 0;
-    }
 
-    //Inicializando a matriz
+    //Inicializando o vetor de listas de adjacência
     for (int i = 0; i < n; i++) {
+        dist[i] = lista_criar();
         for (int j = 0; j < n; j++) {
-            dist[i][j] = 0;
+            lista_adicionar_fim(dist[i], 0);
         }
     }
 
@@ -31,28 +29,31 @@ int main() {
         int x, y, w;
         scanf("%d %d %d", &x, &y, &w);
         x--, y--; // prefixar as cidades no 0 (1 -> 0, 2 ->1, ...)
-        dist[x][y] = w;
-        dist[y][x] = w;
+        lista_trocar(dist[x], y, w);
+        lista_trocar(dist[y], x, w);
     }
 
     //Lidando com as estradas que não existem
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
-            if (dist[i][j] == 0) {
-                dist[i][j] = INF;
-                dist[j][i] = INF;
+            if (lista_buscar(dist[i], j) == 0) {
+                lista_trocar(dist[i], j, INF);
+                lista_trocar(dist[j], i, INF);
             }
         }
     }
     
     for (int mask = 0; mask < (1<<(n-1)); mask++) {
+        dp[mask] = lista_criar();
+        pai[mask] = lista_criar();
         for (int i = 0; i < n; i++) {
-            dp[mask][i] = INF; // inicia as distancias mínimas de 'ini' a n como INF
+            lista_adicionar_fim(dp[mask], INF); // inicia todas as distâncias mínimas como INF
+            lista_adicionar_fim(pai[mask], -1);
         }
     }
-    
-    dp[0][0] = 0; // caso base
+
+    lista_trocar(dp[0], 0, 0); // caso base
 
     clock_t start, end;
 
@@ -61,10 +62,10 @@ int main() {
         for (int i = 0; i < n; i++) {
             for (int j = 1; j < n; j++) {
                 if (mask & (1<<(j-1))) continue; // se o j já tiver sido visitado
-                int now = dp[mask][i] + dist[i][j]; // distancia mínima até i + distancia de i pro próx
-                if (now < dp[mask+(1<<(j-1))][j]) {
-                    dp[mask+(1<<(j-1))][j] = now; // se for menor, troca 
-                    pai[mask+(1<<(j-1))][j] = i; // guarda de onde veio para montar o caminho
+                int now = lista_buscar(dp[mask], i) + lista_buscar(dist[i], j); // distancia mínima até i + distancia de i pro próx
+                if (now < lista_buscar(dp[mask+(1<<(j-1))], j)) {
+                    lista_trocar(dp[mask+(1<<(j-1))], j, now); // se for menor, troca 
+                    lista_trocar(pai[mask+(1<<(j-1))], j, i); // guarda de onde veio para montar o caminho
                 }
             }
         }
@@ -72,10 +73,11 @@ int main() {
     end = clock();
 
     int ultima_cidade = -1;
+    int mask = (1<<(n-1))-1; // mudei isso
 
     for (int i = 1; i < n; i++) {
-        if (dp[(1<<(n-1))-1][i] + dist[i][0] < resp) {
-            resp = dp[(1<<(n-1))-1][i] + dist[i][0];
+        if (lista_buscar(dp[mask], i) + lista_buscar(dist[i], 0) < resp) {
+            resp = lista_buscar(dp[mask], i) + lista_buscar(dist[i], 0);
             ultima_cidade = i;
             // obtem a resposta minima para visitar todas as cidades + distancia de voltar pra 1
         }
@@ -86,13 +88,12 @@ int main() {
     printf("Tempo de Execução: %lf segundos\n", tempo);
 
     int caminho[16];
-    int mask = (1<<(n-1))-1;
     int cidade_atual = ultima_cidade;
     int id = 0;
 
     while (cidade_atual != 0) {
         caminho[id++] = cidade_atual + 1;
-        int prox_cidade = pai[mask][cidade_atual];
+        int prox_cidade = lista_buscar(pai[mask], cidade_atual);
         mask ^= (1<<(cidade_atual-1));
         cidade_atual = prox_cidade;
     }
