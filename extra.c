@@ -112,4 +112,15 @@ int main() {
         printf(" - %d", lista_buscar(caminho, i));
 
     printf("\nMenor Distância: %d\n", resp);
+
+    // Desalocar listas
+    lista_apagar(&caminho);
+    
+    for (int i = 0; i < n; i++) 
+        lista_apagar(&(dist[i]));
+
+    for (int i = 0; i < (1<<(n-1)); i++) {
+        lista_apagar(&(dp[i]));
+        lista_apagar(&(pai[i]));
+    }
 }
