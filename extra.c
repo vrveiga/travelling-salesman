@@ -1,3 +1,5 @@
+// Problema do caixeiro viajante em O(N^2*2^N) usando dp em bitmask
+
 #include <stdio.h>
 #include "lista.h"
 #include <time.h>
@@ -5,20 +7,16 @@
 
 #define INF 99999999
 
-
-// Problema do caixeiro viajante em O(N^2*2^N) usando dp em bitmask
-
-
 int main() {
     int n, ini, m, resp = INF;
     LISTA* dist[16];
     LISTA* dp[1<<15]; // Armazena o caminho mínimo para uma cidade considerando a bitmask
     LISTA* pai[1<<15]; // Armazena a cidades anterior a última de cada mask da dp 
 
-    //Lendo o input
+    // Lendo o input
     scanf("%d %d %d", &n, &ini, &m);
 
-    //Inicializando o vetor de listas de adjacência "dist"
+    // Inicializando o vetor de listas de adjacência "dist"
     for (int i = 0; i < n; i++) {
         dist[i] = lista_criar();
         for (int j = 0; j < n; j++) {
@@ -26,16 +24,16 @@ int main() {
         }
     }
 
-    //Lendo as distâncias entre as cidades
+    // Lendo as distâncias entre as cidades
     for (int i = 0; i < m; i++) {
         int x, y, w;
         scanf("%d %d %d", &x, &y, &w);
-        x--, y--; // prefixar as cidades no 0 (1 -> 0, 2 ->1, ...)
+        x--, y--; // Prefixar as cidades no 0 (1 -> 0, 2 -> 1, ...)
         lista_trocar(dist[x], y, w);
         lista_trocar(dist[y], x, w);
     }
 
-    //Lidando com as estradas que não existem
+    // Lidando com as estradas que não existem
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             if (i == j) continue;
@@ -65,7 +63,7 @@ int main() {
         for (int i = 0; i < n; i++) { 
             for (int j = 1; j < n; j++) {
                 if (mask & (1<<(j-1))) continue; // Se o j já tiver sido visitado
-                int now = lista_buscar(dp[mask], i) + lista_buscar(dist[i], j); // Distância mínima até i + distancia de i pro próx
+                int now = lista_buscar(dp[mask], i) + lista_buscar(dist[i], j); // Distância mínima até i + distancia de i pro próximo
                 if (now < lista_buscar(dp[mask+(1<<(j-1))], j)) {
                     lista_trocar(dp[mask+(1<<(j-1))], j, now); // Se for menor, troca 
                     lista_trocar(pai[mask+(1<<(j-1))], j, i); // Guarda de onde veio para montar o caminho
@@ -93,7 +91,7 @@ int main() {
     LISTA* caminho = lista_criar(); // Armazena a rota saindo da cidade 1 
     int cidade_atual = ultima_cidade;
     int id = 0;
-    int id_ini = -1; //id da cidade ini na lista caminho
+    int id_ini = -1; // Identificador da cidade ini na lista caminho
 
     // Armazena o caminho com início e fim na cidade 1 
     while (cidade_atual != 0) {
@@ -115,7 +113,10 @@ int main() {
     printf("Cidade Origem: %d\n", ini);    
     printf("Rota: %d", ini);
 
-    // A direção do caminho é para esquerda se a distância da cidade nesse sentido for a menor 
+    // Transformamos a rota com início e fim em 1 na rota com início e fim no ini:
+
+    // Raciocínio para tornar a rota lexograficamente mínima
+    // Escolhe o lado que iremos percorrer no próximo passo
     bool go_left = true; 
     if (id_ini == 0) {
         if (lista_buscar(caminho, id) > lista_buscar(caminho, 1))
@@ -128,8 +129,9 @@ int main() {
             go_left = false;
     }
 
-    // Printa a rota considerando a direção (go_left) e realizando 
-    // um "shift" para a rota com início em ini
+    // Printa a rota considerando a direção (go_left) e percorrendo
+    // o caminho a partir do id_ini, utilizando o a ideia que o fim
+    // da lista estaria ligado com o início
     if (go_left) {
         for (int i = id_ini-1; i >= 0; i--) 
             printf(" - %d", lista_buscar(caminho, i));
@@ -144,7 +146,7 @@ int main() {
 
     printf("\nMenor Distância: %d\n", resp);
 
-    // Apagando as estrturas    
+    // Apagando as estruturas
     lista_apagar(&caminho);
     
     for (int i = 0; i < n; i++) 
@@ -154,4 +156,6 @@ int main() {
         lista_apagar(&(dp[i]));
         lista_apagar(&(pai[i]));
     }
+
+    return 0;
 }
