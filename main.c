@@ -1,9 +1,8 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 #include "lista.h"
 
-#define INF 999999999
+#define INF 99999999
 
 /**
  * Função para gerar todas as permutações de caminhos
@@ -97,6 +96,12 @@ int main() {
         }
     }
 
+    // for (int i = 0; i < n; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         printf("%d ", lista_buscar(dist[i], j));
+    //     } printf("\n");
+    // }
+
     // Criação das Estruturas de Dados
     LISTA* lista = lista_criar();
     LISTA* usado = lista_criar();
@@ -116,7 +121,7 @@ int main() {
 
     double tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-    printf("Tempo de Execução: %lf segundos\n", tempo);
+    // printf("Tempo de Execução: %lf segundos\n", tempo);
 
     // Printando a resposta
     printf("Cidade Origem: %d\n", ini);

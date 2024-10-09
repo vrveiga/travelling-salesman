@@ -85,7 +85,7 @@ int main() {
 
     double tempo = (double)(end - start) / CLOCKS_PER_SEC;
 
-    printf("Tempo de Execução: %lf segundos\n", tempo);
+    // printf("Tempo de Execução: %lf segundos\n", tempo);
 
     LISTA* caminho = lista_criar();
     int cidade_atual = ultima_cidade;

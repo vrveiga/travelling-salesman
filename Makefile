@@ -28,4 +28,4 @@ $(TARGET_EXTRA): $(OBJS_EXTRA)
 
 # Limpa arquivos objetos e executáveis
 clean:
-	rm -f $(OBJS) $(TARGET) $(OBJS_EXTRA) $(TARGET_EXTRA)
+	rm -f $(OBJS) $(TARGET) $(OBJS_EXTRA) $(TARGET_EXTRA) gen out_brute out_dp
