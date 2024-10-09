@@ -44,7 +44,7 @@ void forca_bruta(LISTA* lista, LISTA* caminho, LISTA* dist[20], LISTA* usado, in
             lista_adicionar_fim(caminho, ini);
         }
     } else {
-        // Construção da perumutação. Loop passa pelas cidades 2 até n, colocando elas na
+        // Construção da perumutação. Loop passa pelas cidades 1 até n, colocando elas na
         // estrutura "lista" caso ela não esteja de forma recursiva
         for (int i = 1; i <= n; i++) {
             if (i == ini || lista_buscar(usado, i-1)) continue;
