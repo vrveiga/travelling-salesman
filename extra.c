@@ -74,7 +74,7 @@ int main() {
     end = clock();
 
     int ultima_cidade = -1;
-    int mask = (1<<(n-1))-1; // mudei isso
+    int mask = (1<<(n-1))-1;
 
     for (int i = 1; i < n; i++) {
         if (lista_buscar(dp[mask], i) + lista_buscar(dist[i], 0) < resp) {
@@ -103,7 +103,7 @@ int main() {
         cidade_atual = prox_cidade;
     }
     lista_adicionar_fim(caminho, 1);
-    
+
     if (id_ini == -1)
         id_ini = id;
 
