@@ -2,10 +2,10 @@
 
 gcc main.c lista.c -o exe
 gcc extra.c lista.c -o extra
-g++ ran_number.cxx -o gen
+g++ ran_number.cxx -o gen -Dncheck
 
 for ((i = 1; ; ++i)); do
-    ./gen 4 100 20 > input_gen
+    ./gen 10 100 0 > input_gen
     ./exe < input_gen > out_brute
     ./extra < input_gen > out_dp
     diff -Z out_brute out_dp > /dev/null || break

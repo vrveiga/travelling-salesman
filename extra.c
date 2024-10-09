@@ -103,12 +103,9 @@ int main() {
         cidade_atual = prox_cidade;
     }
     lista_adicionar_fim(caminho, 1);
+    
     if (id_ini == -1)
         id_ini = id;
-
-    // printf("%d\n", id_ini);
-    // for (int i = 0; i <= id; i++) printf("%d ", lista_buscar(caminho, i));
-    // printf("\n");
 
     printf("Cidade Origem: %d\n", ini);    
     printf("Rota: %d", ini);
