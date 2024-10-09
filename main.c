@@ -99,12 +99,6 @@ int main() {
         }
     }
 
-    // for (int i = 0; i < n; i++) {
-    //     for (int j = 0; j < n; j++) {
-    //         printf("%d ", lista_buscar(dist[i], j));
-    //     } printf("\n");
-    // }
-
     // Criação das Estruturas de Dados
     LISTA* lista = lista_criar();
     LISTA* usado = lista_criar();
