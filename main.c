@@ -19,7 +19,7 @@
  * @return -> void
  */
 void forca_bruta(LISTA* lista, LISTA* caminho, LISTA* dist[20], LISTA* usado, int n, int* ret, int ini) {  
-    // Verifica de a permutação atual possúi o tamanho necessário (n-1)  
+    // Verifica se a permutação atual possúi o tamanho necessário (n-1)  
     if (lista_tamanho(lista) == n-1) {
         // Soma na variável "atual" as distâncias da rota da permutação atual
         int atual = lista_buscar(dist[ini-1], lista_buscar(lista, 0)-1);
@@ -45,7 +45,7 @@ void forca_bruta(LISTA* lista, LISTA* caminho, LISTA* dist[20], LISTA* usado, in
         }
     } else {
         // Construção da perumutação. Loop passa pelas cidades 1 até n, colocando elas na
-        // estrutura "lista" caso ela não esteja de forma recursiva
+        // estrutura "lista" caso ela não esteja, de forma recursiva
         for (int i = 1; i <= n; i++) {
             if (i == ini || lista_buscar(usado, i-1)) continue;
             lista_trocar(usado, i-1, 1);
@@ -70,6 +70,7 @@ int main() {
         return 0;
     }
 
+    //Inicializando as listas com as distâncias
     for (int i = 0; i < n; i++) {
         dist[i] = lista_criar();
     }
@@ -140,4 +141,6 @@ int main() {
     for (int i = 0; i < n; i++) {
         lista_apagar(&(dist[i]));
     }
+
+    return 0;
 }
