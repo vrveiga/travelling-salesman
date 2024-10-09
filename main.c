@@ -7,11 +7,13 @@
 /**
  * Função para gerar todas as permutações de caminhos
  * 
+ * @param n -> Número de cidades
+ * @param ini -> Cidade inicial 
+ * @param m -> Quantidade de caminhos 
  * @param lista -> Lista de dados que guarda a permutação atual
  * @param caminho -> Lista que guarda a rota mais eficiente até o momento
  * @param dist -> Lista de Listas que guarda as distâncias entre as cidades
  * @param usado -> Lista que guarda o valor que verifica se uma cidade já está na permutação atual
- * @param n -> Número de cidades
  * @param ret -> Distância mais eficiente a ser percorrida
  * 
  * @return -> void
@@ -58,7 +60,7 @@ void forca_bruta(LISTA* lista, LISTA* caminho, LISTA* dist[20], LISTA* usado, in
 int main() {
     // Número de cidades, caminhos e cidade inicial
     int n, m, ini;
-    // Matriz das distâncias entre as cidades
+    // Vetor de listas das distâncias entre as cidades
     LISTA* dist[20];
 
     // Leitura dos dados e inicializar distâncias
