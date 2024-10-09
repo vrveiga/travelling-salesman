@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "lista.h"
 #include <time.h>
+#include <stdbool.h>
 
 #define INF 99999999
 
@@ -102,14 +103,39 @@ int main() {
         cidade_atual = prox_cidade;
     }
     lista_adicionar_fim(caminho, 1);
+    if (id_ini == -1)
+        id_ini = id;
+
+    // printf("%d\n", id_ini);
+    // for (int i = 0; i <= id; i++) printf("%d ", lista_buscar(caminho, i));
+    // printf("\n");
 
     printf("Cidade Origem: %d\n", ini);    
     printf("Rota: %d", ini);
-    for (int i = id_ini-1; i >= 0; i--) 
-        printf(" - %d", lista_buscar(caminho, i));
 
-    for (int i = id; i >= id_ini; i--)
-        printf(" - %d", lista_buscar(caminho, i));
+    bool go_left = true;
+    if (id_ini == 0) {
+        if (lista_buscar(caminho, id) > lista_buscar(caminho, 1))
+            go_left = false;
+    } else if (id_ini == id) {
+        if (lista_buscar(caminho, id-1) > lista_buscar(caminho, 0))
+            go_left = false;
+    } else {
+        if (lista_buscar(caminho, id_ini-1) > lista_buscar(caminho, id_ini+1))
+            go_left = false;
+    }
+
+    if (go_left) {
+        for (int i = id_ini-1; i >= 0; i--) 
+            printf(" - %d", lista_buscar(caminho, i));
+        for (int i = id; i >= id_ini; i--)
+            printf(" - %d", lista_buscar(caminho, i));
+    } else {
+        for (int i = id_ini+1; i <= id; i++)
+            printf(" - %d", lista_buscar(caminho, i));
+        for (int i = 0; i <= id_ini; i++) 
+            printf(" - %d", lista_buscar(caminho, i));
+    }
 
     printf("\nMenor Distância: %d\n", resp);
 
